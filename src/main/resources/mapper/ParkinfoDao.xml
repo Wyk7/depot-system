@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.depot.ex.dao.ParkinfoDao">
+<cache type="com.depot.ex.utils.RedisCache"/>
+	<insert id="save" parameterType="com.depot.ex.entity.ParkInfo">
+		INSERT INTO parkinfo(parknum,cardnum,carnum,parkin,parktem) value(#{parkNum},#{cardNum},#{carNum},#{parkin},#{parktem})
+	</insert>
+	<select id="findParkinfoByParknum" resultType="com.depot.ex.entity.ParkInfo">
+		SELECT * FROM parkinfo where parknum=#{id}
+	</select>
+</mapper>

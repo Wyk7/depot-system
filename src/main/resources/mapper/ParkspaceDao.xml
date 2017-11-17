@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.depot.ex.dao.ParkspaceDao">
+<cache type="com.depot.ex.utils.RedisCache"/>
+	<insert id="save" parameterType="com.depot.ex.entity.ParkSpace">
+		INSERT INTO parkspace(parkid) value(#{parkid})
+	</insert>
+	<select id="findMaxSpace" resultType="int">
+		SELECT count(*) FROM parkspace
+	</select>
+	<select id="findAllParkspace" resultType="com.depot.ex.entity.ParkSpace">
+		SELECT * FROM parkspace order by parkid,status,tag
+	</select>
+	<update id="changeStatus">
+		UPDATE parkspace SET status=${status} WHERE id=${id}
+	</update>
+</mapper>

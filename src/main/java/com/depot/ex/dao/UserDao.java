@@ -16,11 +16,13 @@ import com.depot.ex.entity.User;
  * @since *
  * @return
  */
-public interface UserDao {
+public interface UserDao extends BaseDao<User>{
 
-	public int addUser(@Param("username") String username, @Param("name") String name,
-			@Param("password") String password, @Param("sex") String sex, @Param("tel") String tel,
-			@Param("role") int role);
+	//添加用户
+	public void save(User user);
+	//通过id查用户
 	public User findUserById(int id);
+	//通过用户名查用户
+	public User findUserByUserName(String  username);
 
 }

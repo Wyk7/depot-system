@@ -10,7 +10,7 @@ import java.io.Serializable;
 @since  * 
 @return  */
 public class User implements Serializable{
-	private int id;
+	private Integer id;
 	private String username;
 	private String name;
 	private String password;
@@ -20,7 +20,7 @@ public class User implements Serializable{
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUsername() {
