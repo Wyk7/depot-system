@@ -22,5 +22,11 @@ public interface ParkspaceDao extends BaseDao<ParkSpace>{
 	public List<ParkSpace> findAllParkspace();
 	
 	public void changeStatus(@Param("id")int id,@Param("status")int status);
+
+	public List<ParkSpace> findParkspaceByTag(@Param("tag")int tag);
+
+	public void changeStatusByParkNum(@Param("parkNum")int parkNum, @Param("status")int status);
+	
+
 	
 }

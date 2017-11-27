@@ -16,7 +16,6 @@ public class ParkInfo implements Serializable{
 	private String cardnum;
 	private String carnum;
 	private Date parkin;
-	private Date parkout;
 	private int parktem;
 	public int getParktem() {
 		return parktem;
@@ -54,11 +53,11 @@ public class ParkInfo implements Serializable{
 	public void setParkin(Date parkin) {
 		this.parkin = parkin;
 	}
-	public Date getParkout() {
-		return parkout;
+	@Override
+	public String toString() {
+		return "ParkInfo [id=" + id + ", parknum=" + parknum + ", cardnum=" + cardnum + ", carnum=" + carnum
+				+ ", parkin=" + parkin +  ", parktem=" + parktem + "]";
 	}
-	public void setParkout(Date parkout) {
-		this.parkout = parkout;
-	}
+	
 	
 }

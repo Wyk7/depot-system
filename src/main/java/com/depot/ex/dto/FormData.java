@@ -24,6 +24,14 @@ public class FormData {
 	private Date parkin;
 	//出库时间
 	private Date parkout;
+	//车位类型
+	private Integer tag;
+	public Integer getTag() {
+		return tag;
+	}
+	public void setTag(Integer tag) {
+		this.tag = tag;
+	}
 	public int getId() {
 		return id;
 	}
@@ -68,8 +76,9 @@ public class FormData {
 	}
 	@Override
 	public String toString() {
-		return "FormData [parkspaceId=" + parkNum + ", cardNum=" + cardNum + ", carNum=" + carNum + ", parkTem="
-				+ parkTem + "]";
+		return "FormData [id=" + id + ", parkNum=" + parkNum + ", cardNum=" + cardNum + ", carNum=" + carNum
+				+ ", parkTem=" + parkTem + ", parkin=" + parkin + ", parkout=" + parkout + ", tag=" + tag + "]";
 	}
+	
 	
 }

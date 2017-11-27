@@ -45,5 +45,12 @@ public class ParkspaceServiceImpl implements ParkspaceService {
 	public void changeStatus(int id, int status) {
 		parkspaceDao.changeStatus(id, status);
 	}
+	public List<ParkSpace> findParkspaceByTag(int tag) {
+		return parkspaceDao.findParkspaceByTag(tag);
+	}
+	public void changeStatusByParkNum(int parkNum, int status) {
+		parkspaceDao.changeStatusByParkNum(parkNum, status);
+		
+	}
 
 }

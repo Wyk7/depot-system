@@ -7,12 +7,18 @@
 		<!-- <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
 			SELECT LAST_INSERT_ID();
 		</selectKey> -->
-		INSERT INTO user(username,name,password,sex,tel,role) value(#{username},#{name},#{password},#{sex},#{tel},#{role})
+		INSERT INTO user(username,name,password,sex,tel,role) values(#{username},#{name},#{password},#{sex},#{tel},#{role})
 	</insert>
 	<select id="findUserById" resultType="User" parameterType="int">
 		SELECT * FROM user where id=#{id}
 	</select>
+	<select id="findUserByCardid" resultType="User" parameterType="int">
+		SELECT * FROM user where cardid=#{cardid}
+	</select>
 	<select id="findUserByUserName" resultType="User" parameterType="String">
 		SELECT * FROM user where username=#{username}
 	</select>
+	<insert id="saveByaddDepotCard">
+		INSERT INTO user(username,name,password,tel,cardid) values(#{username},#{username},#{username},#{username},#{cardid})
+	</insert>
 </mapper>

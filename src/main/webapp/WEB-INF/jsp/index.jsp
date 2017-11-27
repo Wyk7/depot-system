@@ -129,14 +129,8 @@ th {
 		<div class="leftscan"
 			style="width: 20%; min-height: 100%; float: left; background-color: #eee;">
 			<ul style="list-style: none; color: #1963aa;">
-				<li id="parkspaceMan" onclick="parkspaceManSpan()"><a>停车位管理</a>
-					<ul id="parkspaceMan_span" style="font-size: 12px;">
-						<li style="background-color: #cdcdcf;"><a id="simplePark" href="${APP_PATH }/index/toindex">
-								< 正常车位</a></li>
-						<li style="background-color: #cdcdcf;"><a> < 临时车位 </a></li>
-						<li style="background-color: #cdcdcf;"><a> < 紧急车位</a></li>
-					</ul></li>
-				<li><a href="${APP_PATH }/index/findAllDepotcard" target="main"
+				<li><a href="${APP_PATH }/index/toindex?tag=0">停车位管理</a></li>
+				<li><a href="${APP_PATH }/index/toDepotcardIndex" target="main"
 					onclick="$('div#main').load(this.href);return false;">停车卡管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
 					onclick="$('div#main').load(this.href);return false;">停车管理</a></li>
@@ -151,13 +145,32 @@ th {
 					<div style="float: left; line-height: 10px; padding: 10px 10px;">车位状况</div>
 					<div class="col-lg-6" style="width: 30%; float: left;">
 						<div class="input-group">
-							<input placeholder="请输入卡号" type="text" class="form-control">
+							<input id="inputcardnum" placeholder="请输入卡号" type="text" class="form-control">
 							<span class="input-group-btn">
-								<button class="btn btn-default" type="button">出库</button>
+								<button class="btn btn-default" type="button" onclick="checkOutByCardnum()">出库</button>
 							</span>
 						</div>
 						<!-- /input-group -->
 					</div>
+
+					<div class="dropdown" style="float: right; margin-right: 10%">
+						<button type="button" class="btn dropdown-toggle"
+							id="dropdownMenu1" data-toggle="dropdown">
+							查看车位 <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/toindex?tag=0">全部车位</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/toindex?tag=1">正常车位</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/toindex?tag=2">临时车位</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/toindex?tag=3">紧急车位</a></li>
+						</ul>
+					</div>
+
 				</caption>
 				<tr>
 					<th>车位号</th>
@@ -175,9 +188,10 @@ th {
 								<input class="btn btn-default" type="button"
 									onclick="checkIn(${item.parkid},${item.id })" value="入库">
 							</c:if> <c:if test="${item.status!=0 }">
-								<input onclick="checkOut(${item.parkid})" class="btn btn-default" type="button" value="出库">
+								<input onclick="checkOut(${item.parkid})"
+									class="btn btn-default" type="button" value="出库">
 							</c:if></td>
-						<td><input class="btn btn-default" type="button" value="查看"></td>
+						<td><input class="btn btn-default" type="button" onclick="checkDetail(${item.parkid})" value="查看"></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -218,19 +232,9 @@ th {
 	<!-- /.modal -->
 </body>
 <script type="text/javascript">
-	$("#simplePark").css("background-color","white");
 	$('#myModal').on('hidden.bs.modal', function () {
 		$(".modal-body").empty();
 	})
-	function parkspaceManSpan(){
-		if(!$("#parkspaceMan_span").is(':visible'))
-			{
-				$("#parkspaceMan_span").show();
-			}
-		else{
-			$("#parkspaceMan_span").hide();
-		}
-	}
 	/* 入库模态框显示*/
 	function checkIn(parknum,id) {
 		var html = "<input id=\"id\" name=\"id\" value=\""+id+"\" hidden=\"hidden\"/>"
@@ -247,6 +251,7 @@ th {
 				+"<select id=\"parkTem\" name=\"parkTem\" style=\"width:100px\" class=\"form-control\"> "
 				+"<option value=\"0\">否</option><option value=\"1\">是</option> </select>";
 		$("#myModalLabel").html("车辆入库");
+		$("#checkSubmit").html("入库");
 		$("#checkSubmit").attr("onclick","checkInSubmit()");
 		$(".modal-body").append(html);
 		$("#myModal").modal('show');
@@ -261,9 +266,7 @@ th {
 			contentType:'application/x-www-form-urlencoded',
 			success:function(data){
 				$("#myModal").modal('hide');
-				document.getElementById("simplePark").click();
-				document.getElementById("parkspaceMan").click();
-				$("#simplePark").css("background-color","white");
+				window.location.href="/depot-system/index/toindex";
 			}
 		})
 	}
@@ -304,7 +307,7 @@ th {
 		}) 
 	}
 	/* 出库提交 */
-	function checkInSubmit(){
+	function checkOutSubmit(){
 		$.ajax({
 			type:'post',
 			url:'/depot-system/index/check/checkOut',
@@ -313,11 +316,111 @@ th {
 			contentType:'application/x-www-form-urlencoded',
 			success:function(data){
 				$("#myModal").modal('hide');
-				document.getElementById("simplePark").click();
-				document.getElementById("parkspaceMan").click();
-				$("#simplePark").css("background-color","white");
+				window.location.href="/depot-system/index/toindex";
 			}
 		})
 	}
+	
+	/* 通过卡号出库模态框显示 */
+	function checkOutByCardnum() {
+		var cardnum=$("#inputcardnum").val();
+		if(cardnum=="")
+			{
+			alert("输入不能为空!");
+			return false;
+			}
+		 $.ajax({
+			type:'get',
+			url:'/depot-system/index/check/findParkinfoByCardnum',
+			datatype:'json',
+			data:{cardnum:cardnum},
+			success:function(data){
+				debugger;
+				if(data.code==100)
+					{
+				var parkTem="否";
+				if(data.extend.parkInfo.parktem==1)
+					{
+					parkTem="是";
+					}
+				var html = "<input id=\"parkNum\" name=\"parkNum\" value=\""+data.extend.parkInfo.parknum+"\" hidden=\"hidden\"/><label>出库卡号：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input id=\"cardNum\" name=\"cardNum\" value=\""+cardnum+"\" type=\"text\" class=\"form-control\">"
+				+ "</div>"
+				+ "</div>"
+				+ "<label>车牌号：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input id=\"carNum\" name=\"carNum\" value=\""+data.extend.parkInfo.carnum+"\" type=\"text\" class=\"form-control\">"
+				+ "</div></div>"
+				+ "<label>是否临时停车：</label><br>"
+				+parkTem
+				$("#myModalLabel").html("车辆出库");
+				$("#checkSubmit").html("出库");
+				$("#checkSubmit").attr("onclick","checkOutSubmit()");
+				$(".modal-body").append(html);
+				$("#myModal").modal('show');
+					}
+			}
+		}) 
+	}
+	
+	
+	/* 查看详情模态框显示 */
+	function checkDetail(parknum) {
+			{
+			
+			}
+		 $.ajax({
+			type:'get',
+			url:'/depot-system/index/check/findParkinfoDetailByParknum',
+			datatype:'json',
+			data:{parkNum:parknum},
+			success:function(data){
+				debugger;
+				if(data.code==100)
+					{
+				var parkTem="否";
+				if(data.extend.parkInfo.parktem==1)
+					{
+					parkTem="是";
+					}
+				var html = "<label>停车位号：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input value=\""+data.extend.parkInfo.parknum+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "</div>"
+				+ "</div>"
+				+"<label>停车用户：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input value=\""+data.extend.user.username+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "</div>"
+				+ "</div>"
+				+"<label>停车卡号：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input value=\""+data.extend.parkInfo.cardnum+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "</div>"
+				+ "</div>"
+				+ "<label>车牌号：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input value=\""+data.extend.parkInfo.carnum+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "</div></div>"
+				+ "<label>停入时间：</label><div style=\"width: 30%;\">"
+				+ "<div class=\"input-group\">"
+				+ "<input value=\""+data.extend.parkin+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "</div></div>"
+				+ "<label>是否临时停车：</label><br>"
+				+parkTem
+				$("#myModalLabel").html("停车位详情");
+				$("#checkSubmit").attr("disabled",true);
+				$(".modal-body").append(html);
+				$("#myModal").modal('show');
+					}
+				else{
+					alert("该停车位没有停车！");
+				}
+			}
+		}) 
+	}
+	
+	
 </script>
 </html>

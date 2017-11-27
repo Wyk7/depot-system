@@ -38,4 +38,10 @@ public class ParkinfoServiceImpl implements ParkinfoService {
 	public ParkInfo findParkinfoByParknum(int parknum) {
 		return parkinfoDao.findParkinfoByParknum(parknum);
 	}
+	public void deleteParkinfoByParkNum(int parkNum) {
+		parkinfoDao.deleteParkinfoByParkNum(parkNum);
+	}
+	public ParkInfo findParkinfoByCardnum(String cardnum) {
+		return parkinfoDao.findParkinfoByCardnum(cardnum);
+	}
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.depot.ex.dao.DepotcardDao">
+	<select id="findAllDepotcard" resultType="com.depot.ex.dto.DepotcardManagerData" parameterType="String">
+		SELECT c.cardnum,t.type,c.money,c.time,c.islose,c.legalcount,u.username 
+		FROM user u, card c ,cardtype t
+		 where u.cardid=c.id and t.id=c.type and c.cardnum like '%${cardnum}%' 
+	</select>
+	<insert id="save"	parameterType="com.depot.ex.entity.Depotcard">
+		INSERT INTO card(cardnum,type,money,time) values(#{cardnum},#{type},#{money},#{time})
+	</insert>
+	<select id="findByCardnum" resultType="com.depot.ex.entity.Depotcard">
+		SELECT * FROM card where cardnum = #{cardnum}
+	</select>
+	<select id="findByCardid" resultType="com.depot.ex.entity.Depotcard">
+		SELECT * FROM card where id = #{cardid}
+	</select>
+</mapper>

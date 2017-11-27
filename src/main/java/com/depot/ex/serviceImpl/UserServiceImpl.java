@@ -26,4 +26,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	public void saveByaddDepotCard(String username, int cardid) {
+		userDao.saveByaddDepotCard(username,cardid);
+	}
+
+	public User findUserByCardid(int cardid) {
+		return userDao.findUserByCardid(cardid);
+	}
+
 }

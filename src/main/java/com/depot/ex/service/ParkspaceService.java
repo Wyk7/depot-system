@@ -16,4 +16,6 @@ public interface ParkspaceService {
 	
 	public List<ParkSpace> findAllParkspace();
 	public void changeStatus(int id,int status);
+	public void changeStatusByParkNum(int parkNum, int status);
+	public List<ParkSpace> findParkspaceByTag(int tag);
 }

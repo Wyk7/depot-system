@@ -24,5 +24,9 @@ public interface UserDao extends BaseDao<User>{
 	public User findUserById(int id);
 	//通过用户名查用户
 	public User findUserByUserName(String  username);
+	//通过username，cardid添加用户（直接添加停车卡时）
+	public void saveByaddDepotCard(@Param("username")String username, @Param("cardid")int cardid);
+	//通过停车卡id查询用户
+	public User findUserByCardid(@Param("cardid")int cardid);
 
 }

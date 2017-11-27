@@ -14,5 +14,9 @@ import com.depot.ex.entity.User;
 public interface UserService {
 	
 	public User findUserByUsername(String username);
+
+	public void saveByaddDepotCard(String username, int cardid);
+
+	public User findUserByCardid(int cardid);
 	
 }

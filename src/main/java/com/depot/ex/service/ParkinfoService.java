@@ -16,4 +16,6 @@ import com.depot.ex.entity.ParkSpace;
 public interface ParkinfoService {
 	public void saveParkinfo(FormData data);
 	public ParkInfo findParkinfoByParknum(int parknum);
+	public void deleteParkinfoByParkNum(int parkNum);
+	public ParkInfo findParkinfoByCardnum(String cardnum);
 }

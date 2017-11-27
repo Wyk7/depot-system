@@ -1,5 +1,7 @@
 package com.depot.ex.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.depot.ex.dto.FormData;
 import com.depot.ex.entity.ParkInfo;
 
@@ -13,5 +15,7 @@ import com.depot.ex.entity.ParkInfo;
 public interface ParkinfoDao extends BaseDao<ParkInfo>{
 	//添加停车位信息
 	public void save(ParkInfo parkInfo);
-	public ParkInfo findParkinfoByParknum(int parknum);
+	public ParkInfo findParkinfoByParknum(@Param("parknum")int parknum);
+	public void deleteParkinfoByParkNum(@Param("parknum")int parknum);
+	public ParkInfo findParkinfoByCardnum(@Param("cardnum")String cardnum);
 }
