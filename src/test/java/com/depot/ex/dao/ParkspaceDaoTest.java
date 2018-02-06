@@ -3,7 +3,7 @@ package com.depot.ex.dao;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.depot.ex.service.ParkspaceService;
+import com.depot.ex.admin.service.ParkspaceService;
 
 /** * 
 @author  зїеп E-mail: * 

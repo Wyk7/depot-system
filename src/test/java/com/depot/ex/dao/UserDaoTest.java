@@ -4,7 +4,8 @@ import org.apache.ibatis.annotations.Param;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.depot.ex.entity.User;
+import com.depot.ex.admin.dao.UserDao;
+import com.depot.ex.admin.entity.User;
 
 /**
  * *

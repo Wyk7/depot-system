@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.depot.ex.entity.User;
-import com.depot.ex.service.UserService;
+import com.depot.ex.admin.entity.User;
+import com.depot.ex.admin.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/spring-web.xml","classpath:spring/spring-service.xml","classpath:spring/spring-dao.xml"})  
