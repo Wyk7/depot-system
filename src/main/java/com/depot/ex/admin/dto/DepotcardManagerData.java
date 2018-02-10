@@ -31,6 +31,15 @@ public class DepotcardManagerData implements Serializable{
 	
 	private int payid;
 	
+	private Date deductedtime;
+	
+	public Date getDeductedtime() {
+		return deductedtime;
+	}
+	public void setDeductedtime(Date deductedtime) {
+		this.deductedtime = deductedtime;
+	}
+	
 	public int getPayid() {
 		return payid;
 	}

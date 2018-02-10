@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.depot.ex.admin.dto.CouponData;
 import com.depot.ex.admin.dto.DepotcardManagerData;
 import com.depot.ex.admin.entity.CardType;
 import com.depot.ex.admin.entity.Coupon;
@@ -77,6 +78,10 @@ public class CardController {
 	@Transactional
 	public Msg addDepotCard(DepotcardManagerData depotcardManagerData)
 	{
+		if(Integer.parseInt(depotcardManagerData.getType())!=1)
+		{
+			depotcardManagerData.setDeductedtime(new Date());
+		}
 		Depotcard depotcard=depotcardService.save(depotcardManagerData);
 		double money=0;
 		Income income=new Income();
@@ -119,8 +124,9 @@ public class CardController {
 	
 	@ResponseBody
 	@RequestMapping("/index/card/findDepotCardByCardnum")
-	public Msg findDepotCardByCardnum(@RequestParam("cardnum")String cardnum)
+	public Msg findDepotCardByCardnum(@RequestParam("cardnum")String cardnum,HttpSession session)
 	{
+		User currentUser=(User) session.getAttribute("user");
 		Depotcard depotcard=depotcardService.findByCardnum(cardnum);
 		if(depotcard==null)
 		{
@@ -132,7 +138,7 @@ public class CardController {
 		CardType cardType=cardtypeService.findCardTypeByid(typeid);
 		List<CardType> cardTypes=cardtypeService.findAllCardType();
 		return Msg.success().add("depotcard", depotcard).add("cardType", cardType)
-				.add("cardTypes", cardTypes).add("user", user);
+				.add("cardTypes", cardTypes).add("user", user).add("user_role", currentUser.getRole());
 	}
 	@ResponseBody
 	@RequestMapping("/index/card/alertDepotCard")
@@ -172,7 +178,7 @@ public class CardController {
 	@RequestMapping("/index/card/findCoupon")
 	public Msg findCoupon(@RequestParam("cardnum")String cardnum)
 	{
-		List<Coupon> list=couponService.findAllCouponByCardNum(cardnum, "");
+		List<CouponData> list=couponService.findAllCouponByCardNum(cardnum, "");
 		if(list!=null&&list.size()>0)
 		{
 			return Msg.success().add("val", list.get(0).getMoney());
@@ -194,7 +200,7 @@ public class CardController {
 			return Msg.fail().add("va_msg", "该停车卡不存在，请重新输入！");
 		}
 		double money=depotcard.getMoney()+depotcardManagerData.getMoney();
-		List<Coupon> list=couponService.findAllCouponByCardNum(depotcardManagerData.getCardnum(), "");
+		List<CouponData> list=couponService.findAllCouponByCardNum(depotcardManagerData.getCardnum(), "");
 		if(list!=null&&list.size()>0)
 		{
 			couponService.deleteCoupon(list.get(0).getId());
@@ -243,6 +249,29 @@ public class CardController {
 		parkinfoService.updateCardnum(cardnum,cardnumNew);
 		parkinfoallService.updateCardnum(cardnum,cardnumNew);
 		return Msg.success();
+	}
+	@ResponseBody
+	@RequestMapping("/index/card/isAlertType")
+	public Msg isAlertType(DepotcardManagerData depotcardManagerData)
+	{
+		Depotcard depotcard=depotcardService.findByCardnum(depotcardManagerData.getCardnum());
+		if(depotcard.getType()!=Integer.parseInt(depotcardManagerData.getType()))
+		{
+			if(Integer.parseInt(depotcardManagerData.getType())>1)
+			{
+				if(Integer.parseInt(depotcardManagerData.getType())==2)
+				{
+					if(depotcard.getMoney()<Constants.MONTHCARD)
+					{
+						
+					}else if(depotcard.getMoney()<Constants.YEARCARD)
+					{
+						
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 }

@@ -13,8 +13,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.depot.ex.admin.dto.CouponData;
 import com.depot.ex.admin.dto.DepotcardManagerData;
 import com.depot.ex.admin.dto.EmailData;
+import com.depot.ex.admin.dto.IncomeData;
 import com.depot.ex.admin.dto.ParkinfoallData;
 import com.depot.ex.admin.entity.Coupon;
 import com.depot.ex.admin.entity.Depotcard;
@@ -331,8 +333,8 @@ public class IndexController {
 		{
 			page--;
 		}
-		List<Coupon> list = null;
-		PageUtil<Coupon> pageUtil=new PageUtil<Coupon>();
+		List<CouponData> list = null;
+		PageUtil<CouponData> pageUtil=new PageUtil<CouponData>();
 		int count =0;
 		int countPage=0;
 		User user1 = (User) session.getAttribute("user");
@@ -370,7 +372,7 @@ public class IndexController {
 		return "coupon";
 	}
 	@RequestMapping("/index/findAllIncome")
-	public String findAllIncome(Model model, HttpSession session,@RequestParam(value="page", required=false) Integer page,@RequestParam(value="startTime",required=false)String startTime,@RequestParam(value="endTime",required=false)String endTime,@RequestParam(value="content",required=false)String content)
+	public String findAllIncome(Model model, HttpSession session,@RequestParam(value="page", required=false) Integer page,@RequestParam(value="startTime",required=false)String startTime,@RequestParam(value="endTime",required=false)String endTime,@RequestParam(value="content",required=false)String content,@RequestParam(value="num",required=false)Integer num)
 	{
 		if(page==null)
 		{
@@ -392,15 +394,28 @@ public class IndexController {
 		{
 			endTime="";
 		}
-		List<Income> incomes=null;
+		if(num==null)
+		{
+			num=9;
+		}
+		List<IncomeData> incomes=null;
+		List<IncomeData> incomes1=null;
 		User user1 = (User) session.getAttribute("user");
-		PageUtil<Income> pageUtil=new PageUtil<Income>();
+		PageUtil<IncomeData> pageUtil=new PageUtil<IncomeData>();
 		int count =0;
 		int countPage=0;
+		double countMoney=0;
 		if (user1 != null) {
 			if (user1.getRole() == 1) {
-				incomes = incomeService.findAllIncome(page*10,Constants.PAGESIZE,content,startTime,endTime);
-				count=incomeService.findAllIncomeCount();
+				incomes = incomeService.findAllIncome(page*10,Constants.PAGESIZE,content,startTime,endTime,num);
+				incomes1 = incomeService.findAllIncome(content,startTime,endTime,num);
+				if(incomes1.size()>0){
+				for(IncomeData incomeData:incomes1)
+				{
+					countMoney+=incomeData.getMoney();
+				}
+				}
+				count=incomeService.findAllIncomeCount(content,startTime,endTime,num);
 				countPage=count/10;
 				if(count%10!=0)
 				{
@@ -421,6 +436,7 @@ public class IndexController {
 			}
 		}
 		model.addAttribute("incomes", pageUtil);
+		model.addAttribute("countMoney", countMoney);
 		return "income";
 	}
 	@RequestMapping("/index/findAllEmail")

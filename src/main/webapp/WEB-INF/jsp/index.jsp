@@ -133,6 +133,8 @@ th {
 					onclick="$('div#main').load(this.href);return false;">优惠券管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
 					onclick="$('div#main').load(this.href);return false;">历史停车管理</a></li>
+				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
+					onclick="$('div#main').load(this.href);return false;">系统设置</a></li>
 			</ul>
 		</div>
 		<div id="main"

@@ -218,11 +218,14 @@ function alertCard(status) {
 			+ "</div></div>"
 			+ "<label>挂失：</label>"
 			+"<select id=\"islose\" name=\"islose\" style=\"width:100px\" class=\"form-control\"> "
-			+"<option value=\"0\">否</option><option value=\"1\">是</option> </select>"
-			+ "<label>卡类型：</label>"
+			+"<option value=\"0\">否</option><option value=\"1\">是</option> </select>";
+			if(data.extend.user_role!=3)
+			{
+			html+="<label>卡类型：</label>"
 			+"<select id=\"type\" name=\"type\" style=\"width:100px\" class=\"form-control\"> "
 			+option
 			+" </select>";
+			}
 	$("#myModalLabel").html("修改停车卡");
 	$("#checkSubmit").html("修改");
 	if(data.extend.depotcard.islose==1)
@@ -269,10 +272,23 @@ function changeLoseCardSubmit()
 
 /* 修改停车卡提交 */
 function alertDepotCardSubmit(){
+	//先判断是否修改卡类型
+	$.ajax({
+		type:'post',
+		url:'/depot-system/index/card/isAlertType',
+		datatype:'text',
+		async: false,
+		data:$("#checkForm").serializeArray(),
+		contentType:'application/x-www-form-urlencoded',
+		success:function(data){
+			
+		}
+	})
 	$.ajax({
 		type:'post',
 		url:'/depot-system/index/card/alertDepotCard',
 		datatype:'text',
+		async: false,
 		data:$("#checkForm").serializeArray(),
 		contentType:'application/x-www-form-urlencoded',
 		success:function(data){

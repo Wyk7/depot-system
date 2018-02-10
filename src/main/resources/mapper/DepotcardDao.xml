@@ -8,7 +8,7 @@
 		limit #{page},#{size}
 	</select>
 	<insert id="save"	parameterType="com.depot.ex.admin.entity.Depotcard">
-		INSERT INTO card(cardnum,type,money,time) values(#{cardnum},#{type},#{money},#{time})
+		INSERT INTO card(cardnum,type,money,time,deductedtime) values(#{cardnum},#{type},#{money},#{time},#{deductedtime})
 	</insert>
 	<select id="findByCardnum" resultType="com.depot.ex.admin.entity.Depotcard" parameterType="String">
 		SELECT * FROM card where cardnum = #{cardnum}

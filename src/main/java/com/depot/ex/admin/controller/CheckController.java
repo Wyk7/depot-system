@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.depot.ex.admin.dto.CouponData;
 import com.depot.ex.admin.dto.FormData;
 import com.depot.ex.admin.entity.Coupon;
 import com.depot.ex.admin.entity.Depotcard;
@@ -99,7 +100,7 @@ public class CheckController {
 			Depotcard depotcard=depotcardService.findByCardnum(data.getCardNum());
 			IllegalInfo illegalInfo=illegalInfoService.findByCardnumParkin(data.getCardNum(),parkInfo.getParkin());
 			Income income=new Income();
-			List<Coupon> coupons=couponService.findAllCouponByCardNum(data.getCardNum(), "");
+			List<CouponData> coupons=couponService.findAllCouponByCardNum(data.getCardNum(), "");
 			if(coupons!=null&&coupons.size()>0)
 			{
 				pay_money-=coupons.get(0).getMoney();
@@ -137,7 +138,7 @@ public class CheckController {
 				Depotcard depotcard=depotcardService.findByCardnum(data.getCardNum());
 				IllegalInfo illegalInfo=illegalInfoService.findByCardnumParkin(data.getCardNum(),parkInfo.getParkin());
 				double money=depotcard.getMoney();
-				List<Coupon> coupons=couponService.findAllCouponByCardNum(data.getCardNum(), "");
+				List<CouponData> coupons=couponService.findAllCouponByCardNum(data.getCardNum(), "");
 				if(coupons!=null&&coupons.size()>0)
 				{
 					money-=coupons.get(0).getMoney();
@@ -300,7 +301,7 @@ public class CheckController {
 			//ø®÷–”‡∂Ó
 			double balance=depotcard.getMoney();
 			int money=0;
-			List<Coupon> coupons=couponService.findAllCouponByCardNum(cardnum, "");
+			List<CouponData> coupons=couponService.findAllCouponByCardNum(cardnum, "");
 			if(coupons!=null&&coupons.size()>0)
 			{
 				money-=coupons.get(0).getMoney();
@@ -338,7 +339,7 @@ public class CheckController {
 			//ø®÷–”‡∂Ó
 			double balance=depotcard.getMoney();
 			int money=0;
-			List<Coupon> coupons=couponService.findAllCouponByCardNum(cardnum, "");
+			List<CouponData> coupons=couponService.findAllCouponByCardNum(cardnum, "");
 			if(coupons!=null&&coupons.size()>0)
 			{
 				money-=coupons.get(0).getMoney();

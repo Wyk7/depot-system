@@ -47,6 +47,7 @@ public class DepotcardServiceImpl implements DepotcardService {
 		depotcard.setMoney(depotcardManagerData.getMoney());
 		depotcard.setTime(date);
 		depotcard.setType(Integer.parseInt(depotcardManagerData.getType()));
+		depotcard.setDeductedtime(depotcardManagerData.getDeductedtime());
 		depotcardDao.save(depotcard);
 		depotcard=depotcardDao.findByCardnum(cardnum);
 		return depotcard;
