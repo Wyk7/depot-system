@@ -272,7 +272,7 @@ th {
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
 						</button>
-						<button id="paySubmit" type="button" onclick="checkOutSubmit();" class="btn btn-primary">支付</button>
+						<button id="paySubmit" type="button" onclick="" class="btn btn-primary">支付</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -482,6 +482,7 @@ $(document).ready(function(){
 						checkOutSubmit();
 					}
 				}
+				$("#paySubmit").attr("onclick","checkOutSubmit()");
 			}
 		}) 
 	}

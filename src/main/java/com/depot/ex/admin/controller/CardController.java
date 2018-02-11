@@ -144,6 +144,9 @@ public class CardController {
 	@RequestMapping("/index/card/alertDepotCard")
 	public Msg alertDepotCard(DepotcardManagerData depotcardManagerData)
 	{
+		
+		
+		
 		Depotcard depotcard=depotcardService.findByCardnum(depotcardManagerData.getCardnum());
 		if(depotcardManagerData.getIslose()!=depotcard.getIslose()
 				||Integer.parseInt(depotcardManagerData.getType())!=depotcard.getType())
@@ -259,19 +262,33 @@ public class CardController {
 		{
 			if(Integer.parseInt(depotcardManagerData.getType())>1)
 			{
+				double money=depotcard.getMoney();
+				List<CouponData> listCou=couponService.findAllCouponByCardNum(depotcard.getCardnum(), "");
+				if(listCou!=null&&listCou.size()>0)
+				{
+					money+=listCou.get(0).getMoney();
+				}
+				//¼ÙÈçÊÇÔÂ¿¨
 				if(Integer.parseInt(depotcardManagerData.getType())==2)
 				{
-					if(depotcard.getMoney()<Constants.MONTHCARD)
+					
+					if(money<Constants.MONTHCARD)
 					{
-						
-					}else if(depotcard.getMoney()<Constants.YEARCARD)
+						return Msg.fail().add("money_pay", Constants.MONTHCARD-money);
+					}else{
+						return Msg.success().add("money_pay", Constants.MONTHCARD);
+					}
+				}else{
+					if(money<Constants.YEARCARD)
 					{
-						
+						return Msg.fail().add("money_pay", Constants.YEARCARD-money);
+					}else{
+						return Msg.success().add("money_pay", Constants.MONTHCARD);
 					}
 				}
 			}
 		}
-		return null;
+		return Msg.fail().add("money_pay", 0);
 	}
 	
 }

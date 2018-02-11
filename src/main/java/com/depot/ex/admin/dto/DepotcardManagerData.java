@@ -33,6 +33,31 @@ public class DepotcardManagerData implements Serializable{
 	
 	private Date deductedtime;
 	
+	//（0现金，1支付宝，2微信，9从卡中扣费）
+	private int alertpayid;
+	
+	private int alertpay_money;
+	
+	private int alertpay_type;
+	
+	public int getAlertpay_money() {
+		return alertpay_money;
+	}
+	public int getAlertpay_type() {
+		return alertpay_type;
+	}
+	public int getAlertpayid() {
+		return alertpayid;
+	}
+	public void setAlertpay_money(int alertpay_money) {
+		this.alertpay_money = alertpay_money;
+	}
+	public void setAlertpay_type(int alertpay_type) {
+		this.alertpay_type = alertpay_type;
+	}
+	public void setAlertpayid(int alertpayid) {
+		this.alertpayid = alertpayid;
+	}
 	public Date getDeductedtime() {
 		return deductedtime;
 	}

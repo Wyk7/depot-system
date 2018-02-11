@@ -89,7 +89,7 @@ public class CheckController {
 	@RequestMapping("/index/check/checkOut")
 	@ResponseBody
 	@Transactional
-	// 出库操作
+	// 出库操作（0扣费，1不用扣费，9付钱）
 	public Msg checkOut(Model model, FormData data) {
 		int pay_money=data.getPay_money();
 		Date parkout=new Date();
@@ -103,9 +103,9 @@ public class CheckController {
 			List<CouponData> coupons=couponService.findAllCouponByCardNum(data.getCardNum(), "");
 			if(coupons!=null&&coupons.size()>0)
 			{
-				pay_money-=coupons.get(0).getMoney();
 				couponService.deleteCoupon(coupons.get(0).getId());
 			}
+			depotcardService.addMoney(data.getCardNum(), 0);
 			income.setMoney(pay_money);
 			income.setMethod(data.getPayid());
 			income.setCardnum(data.getCardNum());
@@ -304,7 +304,7 @@ public class CheckController {
 			List<CouponData> coupons=couponService.findAllCouponByCardNum(cardnum, "");
 			if(coupons!=null&&coupons.size()>0)
 			{
-				money-=coupons.get(0).getMoney();
+				money=coupons.get(0).getMoney();
 			}
 			parkin=parkInfo.getParkin();
 			day=date.getTime()-parkin.getTime();
@@ -312,9 +312,9 @@ public class CheckController {
 			if(day%(1000*60*60)>0){
 			time+=1;
 			}
-			if(balance-money<time*8)
+			if(balance+money-illegalmoney<time*8)
 			{
-			return Msg.success().add("money_pay", time*8+illegalmoney-money).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
+			return Msg.success().add("money_pay", time*8+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
 			}else{
 			return Msg.fail().add("type", 0).add("money_pay", time*8+illegalmoney-money);
 			}
@@ -342,7 +342,7 @@ public class CheckController {
 			List<CouponData> coupons=couponService.findAllCouponByCardNum(cardnum, "");
 			if(coupons!=null&&coupons.size()>0)
 			{
-				money-=coupons.get(0).getMoney();
+				money=coupons.get(0).getMoney();
 			}
 			parkin=parkInfo.getParkin();
 			day=date.getTime()-parkin.getTime();
@@ -350,9 +350,9 @@ public class CheckController {
 			if(day%(1000*60*60)>0){
 			time+=1;
 			}
-			if(balance-money<time*8)
+			if(balance+money-illegalmoney<time*8)
 			{
-			return Msg.success().add("money_pay", time*8+illegalmoney-money).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
+			return Msg.success().add("money_pay", time*8+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
 			}else{
 			return Msg.fail().add("type", 0);
 			}
