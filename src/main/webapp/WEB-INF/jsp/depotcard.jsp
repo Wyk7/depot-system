@@ -239,7 +239,7 @@ function alertCard(status) {
 	$("#loseSubmit").show();
 	$("#loseSubmit").attr("onclick","changeLoseCardSubmit()");
 	}
-	$("#checkSubmit").attr("onclick","alertDepotCardSubmit()");
+	$("#checkSubmit").attr("onclick","isAlertType()");
 	$(".modal-body").append(html);
 	$("#myModal").modal('show'); 
 	$("#type").val(data.extend.cardType.id);
@@ -296,7 +296,8 @@ function isAlertType(){
 					$("#alertpay_type").val(0);
 					$("#alertpay_money").val(data.extend.money_pay);
 				}
-				
+				//没有改变type或者足够扣费
+					alertDepotCardSubmit();
 				}
 			else{
 				$("#myModal1").modal('show');
@@ -304,8 +305,8 @@ function isAlertType(){
 				$("#wx_text").text(data.extend.money_pay);
 				$("#cash_text").text(data.extend.money_pay);
 				$("#alertpay_money").val(data.extend.money_pay);
+                $("#paySubmit").attr("onclick","alertDepotCardSubmit()");
 			}
-			$("#paySubmit").attr("onclick","alertDepotCardSubmit()");
 		}
 	})
 }

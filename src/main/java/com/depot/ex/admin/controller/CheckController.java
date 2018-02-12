@@ -261,10 +261,6 @@ public class CheckController {
 	@ResponseBody
 	public Msg ispay(@RequestParam("parknum") Integer parknum)
 	{
-		if(parknum==null)
-		{
-			
-		}
 		ParkInfo parkInfo=parkinfoservice.findParkinfoByParknum(parknum.intValue());
 		Date date=new Date();
 		Date parkin;
