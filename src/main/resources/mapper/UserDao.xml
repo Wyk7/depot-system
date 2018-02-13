@@ -28,6 +28,16 @@
 		</if>
 		limit #{page},#{size}
 	</select>
+	<select id="findUsersByRoleMan" resultType="com.depot.ex.admin.entity.User" >
+		SELECT u.*,c.cardnum FROM user u left join card c on c.id=u.cardid where 1=1
+		<if test="role>0">
+			and u.role=#{role}
+		</if>
+		<if test="role==0">
+			and u.role=2 and u.role=3
+		</if>
+		limit #{page},#{size}
+	</select>
 	<insert id="saveByaddDepotCard">
 		INSERT INTO user(username,name,password,tel,cardid) values(#{username},#{name},#{username},#{username},#{cardid})
 	</insert>
@@ -45,6 +55,15 @@
 		SELECT count(*) FROM user u where 1=1 
 		<if test="role!=0">
 		and u.role=#{role}
+		</if>
+	</select>
+	<select id="findAllUserCountMan" resultType="int">
+		SELECT count(*) FROM user u where 1=1
+		<if test="role!=0">
+			and u.role=#{role}
+		</if>
+		<if test="role==0">
+			and u.role=2 and u.role=3
 		</if>
 	</select>
 	<select id="finAllUserByRole" resultType="com.depot.ex.admin.entity.User">

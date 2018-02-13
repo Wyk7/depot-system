@@ -150,7 +150,8 @@ public class IndexController {
 				users=userService.findUsersByRole(tag.intValue(),page*10,Constants.PAGESIZE);
 				count=userService.findAllUserCount(tag);
 			} else if (user1.getRole() == 2) {
-
+				users=userService.findUsersByRoleMan(tag.intValue(),page*10,Constants.PAGESIZE);
+				count=userService.findAllUserCountMan(tag);
 			} else if (user1.getRole() == 3) {
 				users=new ArrayList<User>();
 				users.add(user1);

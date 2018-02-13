@@ -52,6 +52,8 @@ public class UserServiceImpl implements UserService {
 		return userDao.findUsersByRole(role,page,size);
 	}
 
+	public List<User> findUsersByRoleMan(int role,int page,int size){return userDao.findUsersByRoleMan(role,page,size);};
+
 	public User findUserById(int uid) {
 		return userDao.findUserById(uid);
 	}
@@ -67,6 +69,8 @@ public class UserServiceImpl implements UserService {
 	public int findAllUserCount(int role) {
 		return userDao.findAllUserCount(role);
 	}
+
+	public int findAllUserCountMan(int role){return userDao.findAllUserCountMan(role);};
 
 	public List<User> finAllUserByRole(int role) {
 		return userDao.finAllUserByRole(role);

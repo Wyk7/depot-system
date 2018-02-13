@@ -34,6 +34,10 @@
 	<mvc:mapping path="/login/*"/> 
 	<bean class="com.depot.ex.admin.interceptor.LoginInterceptor"/>
 	</mvc:interceptor>
+	<mvc:interceptor>
+	<mvc:mapping path="/login"/>
+	<bean class="com.depot.ex.admin.interceptor.LoginInterceptor"/>
+	</mvc:interceptor>
 	</mvc:interceptors>
 
 </beans>

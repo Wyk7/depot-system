@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import com.depot.ex.admin.entity.User;
 
 /** * 
-@author  ×÷Õß E-mail: * 
-@date ´´½¨Ê±¼ä£º2017Äê10ÔÂ6ÈÕ ÏÂÎç9:42:33 * 
+@author  ï¿½ï¿½ï¿½ï¿½ E-mail: * 
+@date ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£º2017ï¿½ï¿½10ï¿½ï¿½6ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½9:42:33 * 
 @version 1.0 * 
 @parameter  * 
 @since  * 
@@ -28,6 +28,8 @@ public interface UserService {
 	public void save(User user);
 
 	public List<User> findUsersByRole(int tag,int page,int size);
+	
+	public List<User> findUsersByRoleMan(int tag,int page,int size);
 
 	public User findUserById(int uid);
 
@@ -37,6 +39,10 @@ public interface UserService {
 
 	public int findAllUserCount(int role);
 
+	public int findAllUserCountMan(int role);
+
 	public List<User> finAllUserByRole(int i);
+
+
 	
 }

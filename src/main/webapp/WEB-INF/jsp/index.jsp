@@ -302,12 +302,16 @@ $(document).ready(function(){
 	})
 	/* 入库模态框显示*/
 	function checkIn(parknum,id) {
+	    var tem=0;
         $.ajax({
             type: 'post',
             url: '/depot-system/index/depot/checkTem',
             async:false,
             success: function (data) {
-
+                if(data.code==100)
+                {
+                    tem=1;
+                }
             }
         })
 
@@ -323,7 +327,12 @@ $(document).ready(function(){
 				+ "</div></div>"
 				+ "<label>是否临时停车：</label>"
 				+"<select onchange=\"changeParkTem()\" id=\"parkTem\" name=\"parkTem\" style=\"width:100px\" class=\"form-control\"> "
-				+"<option value=\"0\">否</option><option value=\"1\">是</option> </select>";
+				+"<option value=\"0\">否</option>";
+                if(tem==1)
+                {
+                    html+="<option value=\"1\">是</option>";
+                }
+                html+="</select>";
 		$("#myModalLabel").html("车辆入库");
 		$("#checkSubmit").html("入库");
 		$("#checkSubmit").attr("onclick","checkInSubmit()");
