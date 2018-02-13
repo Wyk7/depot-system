@@ -302,6 +302,15 @@ $(document).ready(function(){
 	})
 	/* 入库模态框显示*/
 	function checkIn(parknum,id) {
+        $.ajax({
+            type: 'post',
+            url: '/depot-system/index/depot/checkTem',
+            async:false,
+            success: function (data) {
+
+            }
+        })
+
 		var html = "<input id=\"id\" name=\"id\" value=\""+id+"\" hidden=\"hidden\"/>"
 				+"<input id=\"parkNum\" name=\"parkNum\" value=\""+parknum+"\" hidden=\"hidden\"/><label>入库卡号：</label><div style=\"width: 30%;\">"
 				+ "<div class=\"input-group\">"
