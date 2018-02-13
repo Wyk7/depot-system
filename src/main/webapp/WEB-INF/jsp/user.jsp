@@ -11,7 +11,7 @@
 		<div style="float: left; line-height: 10px; padding: 10px 10px;">用户管理</div>
 		<c:if test="${sessionScope.user.role!=3 }">
 		<button class="btn btn-default" type="button" onclick="addUser()">添加用户</button>
-
+		<input id="user_role" value="${sessionScope.user.role!=3 }" hidden="hidden"/>
 		<div class="dropdown" style="float: right; margin-right: 10%">
 			<button type="button" class="btn dropdown-toggle" id="dropdownMenu1"
 				data-toggle="dropdown">
@@ -85,6 +85,7 @@
 <script type="text/javascript">
 	/* 添加用户模态框显示*/
 	function addUser() {
+        var user_role=$("#user_role").val();
 		var html = "<input id=\"judgeusername\" name=\"judgeusername\" value=\"0\" hidden=\"hidden\"/>"
 				+ "<label>用户账号：</label><div style=\"width: 30%;\">"
 				+ "<div class=\"input-group\">"
@@ -102,8 +103,12 @@
 				+ "</div></div>"
 				+ "<label>类型：</label>"
 				+ "<select id=\"role\" name=\"role\" style=\"width:150px\" class=\"form-control\"> "
-				+ "<option value=\"1\">超级管理员</option>"
-				+ "<option value=\"2\">管理员</option>" + "</select>";
+				+ "<option value=\"2\">管理员</option>";
+			if(user_role==1)
+			{
+			    html+=+ "<option value=\"1\">超级管理员</option>";
+			}
+				html+="</select>";
 		$("#myModalLabel").html("添加用户");
 		$("#checkSubmit").html("添加");
 		$("#checkSubmit").attr("onclick", "addUserSubmit()");
@@ -177,6 +182,7 @@
 	
 	/* 编辑用户模态框显示*/
 	function editUser(uid) {
+        var user_role=$("#user_role").val();
 		$.ajax({
 			type:'get',
 			url:'/depot-system/index/user/findUserById',
@@ -186,8 +192,12 @@
 				if(data.code==100){
 				var root="<label>权限：</label>"
 					+ "<select id=\"role\" name=\"role\" style=\"width:150px\" class=\"form-control\"> "
-					+ "<option value=\"1\">超级管理员</option>"
-					+ "<option value=\"2\">管理员</option>" + "</select>";
+                    + "<option value=\"2\">管理员</option>";
+				if(user_role==1)
+				{
+                    root+= "<option value=\"1\">超级管理员</option>";
+				}
+                    root+= "</select>";
 				var html ="<input  name=\"id\" value=\""+data.extend.user.id+"\" hidden=\"hidden\">"
 					+"<label>用户账号：</label><div style=\"width: 30%;\">"
 					+ "<div class=\"input-group\">"
