@@ -25,7 +25,7 @@
 						</div>
 						<!-- /input-group -->
 					</div>
-					<c:if test="${sessionScope.user.role!=3 }">
+					<c:if test="${sessionScope.user.role==1 }">
 					<button class="btn btn-default" onclick="addCoupon()" type="button">生成优惠券</button>
 					</c:if>
 				</caption>

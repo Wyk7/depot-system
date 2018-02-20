@@ -144,41 +144,10 @@ public class CardController {
 	@RequestMapping("/index/card/alertDepotCard")
 	public Msg alertDepotCard(DepotcardManagerData depotcardManagerData)
 	{
-		int alertpayid=depotcardManagerData.getPayid();
-		int alertPayType=depotcardManagerData.getAlertpay_type();
-		int alertpay_money=depotcardManagerData.getAlertpay_money();
+		
+		
+		
 		Depotcard depotcard=depotcardService.findByCardnum(depotcardManagerData.getCardnum());
-		//扣费或者没有修改type
-		if(alertPayType==0)
-		{
-			//从卡中扣费
-			if(alertpay_money!=0)
-			{
-				List<CouponData> couponDataList=couponService.findAllCouponByCardNum(depotcardManagerData.getCardnum(),"");
-				if(couponDataList!=null&&couponDataList.size()>0)
-				{
-					couponService.deleteCoupon(couponDataList.get(0).getId());
-				}
-				double balance=depotcard.getMoney();
-				balance-=alertpay_money;
-				depotcardService.addMoney(depotcardManagerData.getCardnum(),balance);
-			}
-		}
-		//扫码或现金支付
-		else{
-			List<CouponData> couponDataList=couponService.findAllCouponByCardNum(depotcardManagerData.getCardnum(),"");
-			if(couponDataList!=null&&couponDataList.size()>0)
-			{
-				couponService.deleteCoupon(couponDataList.get(0).getId());
-			}
-			depotcardService.addMoney(depotcardManagerData.getCardnum(),0);
-			Income income=new Income();
-			income.setCardnum(depotcardManagerData.getCardnum());
-			income.setMoney(alertpay_money);
-			income.setMethod(alertpayid);
-			income.setSource(0);
-			incomeService.save(income);
-		}
 		if(depotcardManagerData.getIslose()!=depotcard.getIslose()
 				||Integer.parseInt(depotcardManagerData.getType())!=depotcard.getType())
 		{
@@ -293,30 +262,28 @@ public class CardController {
 		{
 			if(Integer.parseInt(depotcardManagerData.getType())>1)
 			{
-				double balance=depotcard.getMoney();
-				int money=0;
+				double money=depotcard.getMoney();
 				List<CouponData> listCou=couponService.findAllCouponByCardNum(depotcard.getCardnum(), "");
 				if(listCou!=null&&listCou.size()>0)
 				{
-					money=listCou.get(0).getMoney();
+					money+=listCou.get(0).getMoney();
 				}
-				balance+=money;
 				//假如是月卡
 				if(Integer.parseInt(depotcardManagerData.getType())==2)
 				{
 					
-					if(balance<Constants.MONTHCARD)
+					if(money<Constants.MONTHCARD)
 					{
-						return Msg.fail().add("money_pay", Constants.MONTHCARD-balance);
+						return Msg.fail().add("money_pay", Constants.MONTHCARD-money);
 					}else{
-						return Msg.success().add("money_pay", Constants.MONTHCARD-money);
+						return Msg.success().add("money_pay", Constants.MONTHCARD);
 					}
 				}else{
-					if(balance<Constants.YEARCARD)
+					if(money<Constants.YEARCARD)
 					{
-						return Msg.fail().add("money_pay", Constants.YEARCARD-balance);
+						return Msg.fail().add("money_pay", Constants.YEARCARD-money);
 					}else{
-						return Msg.success().add("money_pay", Constants.MONTHCARD-money);
+						return Msg.success().add("money_pay", Constants.MONTHCARD);
 					}
 				}
 			}

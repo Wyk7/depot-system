@@ -24,9 +24,11 @@
 				<li role="presentation"><a role="menuitem" tabindex="-1"
 					href="${APP_PATH }/index/findAllUser?tag=2" target="main"
 					onclick="$('div#main').load(this.href);return false;">管理员</a></li>
+				<c:if test="${sessionScope.user.role==1 }">
 				<li role="presentation"><a role="menuitem" tabindex="-1"
 					href="${APP_PATH }/index/findAllUser?tag=1" target="main"
 					onclick="$('div#main').load(this.href);return false;">超级管理员</a></li>
+				</c:if>
 			</ul>
 		</div>
 		</c:if>
@@ -103,6 +105,7 @@
 				+ "</div></div>"
 				+ "<label>类型：</label>"
 				+ "<select id=\"role\" name=\"role\" style=\"width:150px\" class=\"form-control\"> "
+				+ "<option value=\"3\">用户</option>"
 				+ "<option value=\"2\">管理员</option>";
 			if(user_role==1)
 			{

@@ -35,6 +35,10 @@ public class LoginController {
 	public String login(){
 		return "login";
 	}
+	@RequestMapping("/login")
+	public String login1(){
+		return "login";
+	}
 	
 	@ResponseBody
 	@RequestMapping("/login/index")

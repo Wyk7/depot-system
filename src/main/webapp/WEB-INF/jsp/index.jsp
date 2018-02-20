@@ -121,7 +121,7 @@ th {
 					onclick="$('div#main').load(this.href);return false;">停车卡</a></li>
 				<li><a href="${APP_PATH }/index/findAllIllegalinfo" target="main"
 					onclick="$('div#main').load(this.href);return false;">违规管理</a></li>
-				<c:if test="${sessionScope.user.role!=3 }">
+				<c:if test="${sessionScope.user.role==1 }">
 				<li><a href="${APP_PATH }/index/findAllIncome" target="main"
 					onclick="$('div#main').load(this.href);return false;">收入管理</a></li>
 				</c:if>
@@ -133,8 +133,10 @@ th {
 					onclick="$('div#main').load(this.href);return false;">优惠券管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
 					onclick="$('div#main').load(this.href);return false;">历史停车管理</a></li>
-				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
+				<c:if test="${sessionScope.user.role==1 }">
+				<li><a href="${APP_PATH }/index/system" target="main"
 					onclick="$('div#main').load(this.href);return false;">系统设置</a></li>
+				</c:if>
 			</ul>
 		</div>
 		<div id="main"

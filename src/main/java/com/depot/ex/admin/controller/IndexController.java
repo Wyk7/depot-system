@@ -1,31 +1,38 @@
 package com.depot.ex.admin.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.depot.ex.admin.dto.ChargeData;
 import com.depot.ex.admin.dto.CouponData;
 import com.depot.ex.admin.dto.DepotcardManagerData;
 import com.depot.ex.admin.dto.EmailData;
 import com.depot.ex.admin.dto.IncomeData;
 import com.depot.ex.admin.dto.ParkinfoallData;
-import com.depot.ex.admin.entity.Coupon;
+import com.depot.ex.admin.entity.DepotInfo;
 import com.depot.ex.admin.entity.Depotcard;
-import com.depot.ex.admin.entity.Email;
 import com.depot.ex.admin.entity.IllegalInfo;
-import com.depot.ex.admin.entity.Income;
 import com.depot.ex.admin.entity.ParkSpace;
 import com.depot.ex.admin.entity.User;
 import com.depot.ex.admin.service.CouponService;
+import com.depot.ex.admin.service.DepotInfoService;
 import com.depot.ex.admin.service.DepotcardService;
 import com.depot.ex.admin.service.EmailService;
 import com.depot.ex.admin.service.IllegalInfoService;
@@ -34,8 +41,8 @@ import com.depot.ex.admin.service.ParkinfoallService;
 import com.depot.ex.admin.service.ParkspaceService;
 import com.depot.ex.admin.service.UserService;
 import com.depot.ex.utils.Constants;
+import com.depot.ex.utils.Msg;
 import com.depot.ex.utils.PageUtil;
-import com.github.pagehelper.Page;
 
 /** * 
 @author  作者 E-mail: * 
@@ -63,6 +70,8 @@ public class IndexController {
 	private CouponService couponService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private DepotInfoService depotInfoService;
 	
 	@RequestMapping("/index/toindex")
 	public String toIndex(Model model,HttpSession session,@RequestParam(value="tag",required=false) Integer tag,@RequestParam(value="page",required=false) Integer page)
@@ -101,12 +110,15 @@ public class IndexController {
 				count=parkspaceService.findAllParkspaceCount(tag);
 			}else if(user1.getRole()==2)
 			{
-				
-			}else if(user1.getRole()==3)
-			{
-				
-			}else if(user1.getRole()==4){
-				
+				if(tag==0)
+				{
+				list=parkspaceService.findAllParkspace(page*10,Constants.PAGESIZE);
+				}
+				else
+				{
+				list=parkspaceService.findParkspaceByTag(tag,page*10,Constants.PAGESIZE);
+				}
+				count=parkspaceService.findAllParkspaceCount(tag);
 			}else {
 				
 			}
@@ -200,7 +212,8 @@ public class IndexController {
 				parkinfoallDatas=parkinfoallService.findAllParkinfoallByLike(page*10,Constants.PAGESIZE,name);
 				count=parkinfoallService.findAllParkinfoallCount(name);
 			} else if (user1.getRole() == 2) {
-
+				parkinfoallDatas=parkinfoallService.findAllParkinfoallByLike(page*10,Constants.PAGESIZE,name);
+				count=parkinfoallService.findAllParkinfoallCount(name);
 			} else if (user1.getRole() == 3) {
 				Depotcard depotcard=depotcardService.findByCardid(user1.getCardid());
 				parkinfoallDatas=parkinfoallService.findByCardNum(depotcard.getCardnum(),name);
@@ -250,7 +263,8 @@ public class IndexController {
 				illegalInfo=illegalInfoService.findAllIllegalInfo(page*10,Constants.PAGESIZE,name);
 				count=illegalInfoService.findAllIllegalInfoCount(name);
 			} else if (user1.getRole() == 2) {
-
+				illegalInfo=illegalInfoService.findAllIllegalInfo(page*10,Constants.PAGESIZE,name);
+				count=illegalInfoService.findAllIllegalInfoCount(name);
 			} else if (user1.getRole() == 3) {
 				illegalInfo=illegalInfoService.findByUid(user1.getId());
 				count=illegalInfo.size();
@@ -299,7 +313,8 @@ public class IndexController {
 				depotcardManagerDatas = depotcardService.findAllDepotcard(cardnum,page.intValue()*10,Constants.PAGESIZE);
 				count=depotcardService.findAllDepotcardCount(cardnum);
 			} else if (user1.getRole() == 2) {
-
+				depotcardManagerDatas = depotcardService.findAllDepotcard(cardnum,page.intValue()*10,Constants.PAGESIZE);
+				count=depotcardService.findAllDepotcardCount(cardnum);
 			} else if (user1.getRole() == 3) {
 				depotcardManagerDatas = depotcardService.findByCardId(user1.getCardid());
 				count=depotcardManagerDatas.size();
@@ -348,7 +363,8 @@ public class IndexController {
 				list = couponService.findAllCoupon(page.intValue()*10,Constants.PAGESIZE,name);
 				count=couponService.findAllDepotcardCount(name);
 			} else if (user1.getRole() == 2) {
-
+				list = couponService.findAllCoupon(page.intValue()*10,Constants.PAGESIZE,name);
+				count=couponService.findAllDepotcardCount(name);
 			} else if (user1.getRole() == 3) {
 				Depotcard depotcard=depotcardService.findByCardid(user1.getCardid());
 				list = couponService.findAllCouponByCardNum(depotcard.getCardnum(),name);
@@ -501,13 +517,107 @@ public class IndexController {
 		return "email";
 	}
 	
+	@RequestMapping("/index/system")
+	public String system(Model model, HttpSession session)
+	{
+		return "system";
+	}
+	
 	@RequestMapping("/index/exit")
 	public String exit(Model model, HttpSession session)
 	{
 		session.removeAttribute("user");
 		return "login";
 	}
+	@RequestMapping("/index/exportIncome")
+	public void exportIncome(@RequestParam(value="datetimepickerStart",required=false) String datetimepickerStart,
+			@RequestParam(value="datetimepickerEnd",required=false) String datetimepickerEnd,HttpServletResponse response) {
+		if (datetimepickerStart == null) {
+			datetimepickerStart = "";
+		}
+		if (datetimepickerEnd == null) {
+			datetimepickerEnd = "";
+		}
+		List<IncomeData> list = incomeService.findAllIncome("", datetimepickerStart, datetimepickerEnd, 9);
+
+		// 创建HSSFWorkbook对象(excel的文档对象)
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 建立新的sheet对象（excel的表单）
+		HSSFSheet sheet = wb.createSheet("收入");
+		// 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
+		HSSFRow row1 = sheet.createRow(0);
+		// 创建单元格（excel的单元格，参数为列索引，可以是0～255之间的任何一个
+		HSSFCell cell = row1.createCell(0);
+		// 设置单元格内容
+		cell.setCellValue("收入明细");
+		// 合并单元格CellRangeAddress构造参数依次表示起始行，截至行，起始列， 截至列
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+		// 在sheet里创建第二行
+		HSSFRow row2 = sheet.createRow(1);
+		// 创建单元格并设置单元格内容
+		row2.createCell(0).setCellValue("车牌号");
+		row2.createCell(1).setCellValue("停车卡号");
+		row2.createCell(2).setCellValue("收入");
+		row2.createCell(3).setCellValue("收入方式");
+		row2.createCell(4).setCellValue("收入来源");
+		row2.createCell(5).setCellValue("收入时间");
+		row2.createCell(6).setCellValue("时长");
+		row2.createCell(7).setCellValue("违规");
+		// 在sheet里创建第三行
+		int rowsize=2;
+		for(IncomeData data:list)
+		{
+			HSSFRow row3 = sheet.createRow(rowsize);
+			row3.createCell(0).setCellValue(data.getCarnum());
+			row3.createCell(1).setCellValue(data.getCardnum());
+			row3.createCell(2).setCellValue(data.getMoney());
+			row3.createCell(3).setCellValue(data.getMethod()==0?"现金":data.getMethod()==1?"支付宝":data.getMethod()==2?"微信":"扣卡费");
+			row3.createCell(4).setCellValue(data.getSource()==0?"充值":"出库");
+			row3.createCell(5).setCellValue(data.getTime());
+			row3.createCell(6).setCellValue(data.getDuration());
+			row3.createCell(7).setCellValue(data.getIsillegal());
+			rowsize++;
+		}
+		OutputStream output;
+		try {
+			output = response.getOutputStream();
+			response.reset();
+			response.setHeader("Content-disposition", "attachment; filename=incomeDetail.xls");
+			response.setContentType("application/msexcel");
+			wb.write(output);
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	
+	@RequestMapping("/index/setSystem")
+	@ResponseBody
+	public Msg setSystem(ChargeData chargeData)
+	{
+		Integer hourmoney=chargeData.getHourmoney();
+		Integer monthcard=chargeData.getMonthcard();
+		Integer yearcard=chargeData.getYearcard();
+		Integer illegal=chargeData.getIllegal();
+		DepotInfo depotInfo=depotInfoService.findById(1);
+		if(hourmoney==null||hourmoney==0)
+		{
+			chargeData.setHourmoney(depotInfo.getHourmoney());
+		}
+		if(monthcard==null||monthcard==0)
+		{
+			chargeData.setMonthcard(depotInfo.getMonthcard());
+		}
+		if(yearcard==null||yearcard==0)
+		{
+			chargeData.setYearcard(depotInfo.getYearcard());
+		}
+		if(illegal==null||illegal==0)
+		{
+			chargeData.setIllegal(depotInfo.getIllegal());
+		}
+		depotInfoService.update(chargeData);
+		return Msg.success();
+	}
 	
 }
