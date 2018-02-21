@@ -22,6 +22,13 @@
 		and t.carnum like '%${name}%'
 		</if>
 	</select>
+	<select id="findByCardNumByPage" resultType="com.depot.ex.admin.dto.ParkinfoallData">
+		SELECT * from parkinfoall t where t.cardnum = #{cardnum} 
+		<if test="name!=''">
+		and t.carnum like '%${name}%'
+		</if>
+		limit #{page},#{size}
+	</select>
 	<update id="updateCardnum">
 		update parkinfoall set cardnum=#{cardnumNew} where cardnum=#{cardnum}
 	</update>

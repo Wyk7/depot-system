@@ -72,6 +72,8 @@ public class CheckController {
 	// 入库操作
 	public Msg checkIn(Model model, FormData data) {
 		Depotcard depotcard=depotcardService.findByCardnum(data.getCardNum());
+		if(data.getParkTem()!=1)
+		{
 		if(depotcard!=null)
 		{
 			if(depotcard.getIslose()==1)
@@ -80,6 +82,7 @@ public class CheckController {
 			}
 		}else{
 			return Msg.fail().add("va_msg", "该卡不存在！");
+		}
 		}
 		parkinfoservice.saveParkinfo(data);
 		parkspaceService.changeStatus(data.getId(), 1);
@@ -219,8 +222,13 @@ public class CheckController {
 		System.out.println(parkInfo.toString());
 		String cardnum=parkInfo.getCardnum();
 		Depotcard depotcard=depotcardService.findByCardnum(cardnum);
-		int cardid=depotcard.getId();
-		User user =userService.findUserByCardid(cardid);
+		int cardid=0;
+		User user =null;
+		if(depotcard!=null)
+		{
+		cardid=depotcard.getId();
+		user =userService.findUserByCardid(cardid);
+		}
 		return Msg.success().add("parkInfo", parkInfo).add("user", user).add("parkin", parkin);
 	}
 	

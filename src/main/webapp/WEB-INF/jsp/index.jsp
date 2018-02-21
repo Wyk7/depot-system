@@ -118,24 +118,24 @@ th {
 				<li><a href="${APP_PATH }/index/toindex?tag=0">停车位管理</a></li>
 				</c:if>
 				<li><a id="depotcardIndex" href="${APP_PATH }/index/toDepotcardIndex" target="main"
-					onclick="$('div#main').load(this.href);return false;">停车卡</a></li>
+					onclick="$('div#main').load(this.href);return false;">停车卡管理</a></li>
+				<li><a href="${APP_PATH }/index/findAllCoupon" target="main"
+					onclick="$('div#main').load(this.href);return false;">优惠券管理</a></li>
+				<li><a href="${APP_PATH }/index/findAllEmail" target="main"
+					onclick="$('div#main').load(this.href);return false;">邮箱管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllIllegalinfo" target="main"
 					onclick="$('div#main').load(this.href);return false;">违规管理</a></li>
 				<c:if test="${sessionScope.user.role==1 }">
 				<li><a href="${APP_PATH }/index/findAllIncome" target="main"
 					onclick="$('div#main').load(this.href);return false;">收入管理</a></li>
 				</c:if>
-				<li><a href="${APP_PATH }/index/findAllEmail" target="main"
-					onclick="$('div#main').load(this.href);return false;">邮箱管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllUser" target="main"
 					onclick="$('div#main').load(this.href);return false;">用户管理</a></li>
-				<li><a href="${APP_PATH }/index/findAllCoupon" target="main"
-					onclick="$('div#main').load(this.href);return false;">优惠券管理</a></li>
 				<li><a href="${APP_PATH }/index/findAllDepot" target="main"
-					onclick="$('div#main').load(this.href);return false;">历史停车管理</a></li>
+					onclick="$('div#main').load(this.href);return false;">历史停车</a></li>
 				<c:if test="${sessionScope.user.role==1 }">
 				<li><a href="${APP_PATH }/index/system" target="main"
-					onclick="$('div#main').load(this.href);return false;">系统设置</a></li>
+					onclick="$('div#main').load(this.href);return false;">导出功能</a></li>
 				</c:if>
 			</ul>
 		</div>
@@ -578,6 +578,10 @@ $(document).ready(function(){
 			datatype:'json',
 			data:{parkNum:parknum},
 			success:function(data){
+				var username="";
+				if(data.extend.user!=null){
+					username=data.extend.user.username;
+				}
 				if(data.code==100)
 					{
 				var parkTem="否";
@@ -592,7 +596,7 @@ $(document).ready(function(){
 				+ "</div>"
 				+"<label>停车用户：</label><div style=\"width: 30%;\">"
 				+ "<div class=\"input-group\">"
-				+ "<input value=\""+data.extend.user.username+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+				+ "<input value=\""+username+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
 				+ "</div>"
 				+ "</div>"
 				+"<label>停车卡号：</label><div style=\"width: 30%;\">"

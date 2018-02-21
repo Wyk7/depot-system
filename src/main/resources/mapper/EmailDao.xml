@@ -14,10 +14,30 @@
 <select id="findByUserId" resultType="com.depot.ex.admin.dto.EmailData">
 	select t.* from email t where 1=1 
 	<if test="role==3">
-		and (sendid =#{uid} or toid=#{uid}) and userdeleted=0 and title like '%${content}%' order by userisread,time asc limit #{page},#{size}
+		and (sendid =#{uid} or toid=#{uid}) and userdeleted=0 and title like '%${content}%'  
+		<if test="tag==0">
+		and userisread=0 and sendid!=#{uid}
+		</if>
+		<if test="tag==1">
+		and userisread=1 and sendid!=#{uid}
+		</if>
+		<if test="tag==2">
+		and toid=0
+		</if>
+		order by userisread,time asc limit #{page},#{size}
 	</if>
 	<if test="role!=3">
-		and (sendid=#{uid} or toid=0) and managedelete=0 and title like '%${content}%' order by managerisread,time asc limit #{page},#{size}
+		and (sendid=#{uid} or toid=0) and managedelete=0 and title like '%${content}%' 
+		<if test="tag==0">
+		and managerisread=0 and sendid !=#{uid}
+		</if>
+		<if test="tag==1">
+		and managerisread>1 and sendid!=#{uid}
+		</if>
+		<if test="tag==2">
+		and sendid=#{uid}
+		</if>
+		order by managerisread,time asc limit #{page},#{size}
 	</if>
 </select> 
 <select id="findAllEmailCountByUser" resultType="int">

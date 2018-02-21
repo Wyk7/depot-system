@@ -208,11 +208,11 @@ function alertCard(status) {
 					option+="<option value=\""+(i+1)+"\">"+data.extend.cardTypes[i].type+"</option>";
 					}
 	var html = // 用什么方式支付（0现金，1支付宝，2微信，9从卡中扣费）
-			"<input id=\"alertpayid\" name=\"payid\" value=\"9\" hidden=\"hidden\"/>"
+			"<input id=\"alertpayid\" name=\"alertpayid\" value=\""+9+"\" hidden=\"hidden\"/>"
 			// 需要支付金额 
-			+"<input id=\"alertpay_money\" name=\"pay_money\" value=\"0\" hidden=\"hidden\"/>"
+			+"<input id=\"alertpay_money\" name=\"alertpay_money\" value=\""+0+"\" hidden=\"hidden\"/>"
 			// 扣费还是月卡或年卡未到期 (0扣费，1不用扣费，9付钱)
-			+"<input id=\"alertpay_type\" name=\"pay_type\" value=\"9\" hidden=\"hidden\"/>"
+			+"<input id=\"alertpay_type\" name=\"alertpay_type\" value=\""+9+"\" hidden=\"hidden\"/>"
 			+"<label>卡号：</label><div style=\"width: 30%;\">"
 			+ "<div class=\"input-group\">"
 			+ "<input id=\"cardnum\" name=\"cardnum\" value=\""+data.extend.depotcard.cardnum+"\" type=\"text\" class=\"form-control\" readonly >"
@@ -285,7 +285,7 @@ function isAlertType(){
 		data:$("#checkForm").serializeArray(),
 		contentType:'application/x-www-form-urlencoded',
 		success:function(data){
-			if(data.code==200)
+			if(data.code==100)
 				{
 				if(data.extend.money_pay==0)
 					{
@@ -313,24 +313,26 @@ function isAlertType(){
 
 /* 修改停车卡提交 */
 function alertDepotCardSubmit(){
-	$("#alertpayid").val($("#payid"));
+	var payid=$("#payid").val();
+	if(payid!=null&&payid!='')
+		{
+	$("#alertpayid").val(payid);
+		}
 	$.ajax({
 		type:'post',
 		url:'/depot-system/index/card/alertDepotCard',
-		datatype:'text',
-		async: false,
+		datatype:'json',
 		data:$("#checkForm").serializeArray(),
-		contentType:'application/x-www-form-urlencoded',
 		success:function(data){
 			if(data.code==100)
 				{
 				$("#myModal").modal('hide');
+				$("#myModal1").modal('hide');
 				$("#findDepotcard").attr("href","${APP_PATH }/index/toDepotcardIndex");
 				$("#findDepotcard").click();
 				}else{
 				alert("停车卡没有修改");
 				}
-			
 		}
 	})
 }

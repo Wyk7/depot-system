@@ -22,7 +22,7 @@ public interface EmailDao extends BaseDao<Email>{
 
 	void updateManReadById(int id);
 
-	List<EmailData> findByUserId(@Param("page")int page,@Param("size")int size,@Param("uid")int id,@Param("role")int role,@Param("content")String content);
+	List<EmailData> findByUserId(@Param("page")int page,@Param("size")int size,@Param("uid")int id,@Param("role")int role,@Param("content")String content,@Param("tag")Integer tag);
 
 	int findAllEmailCountByUser(@Param("uid")int uid,@Param("role")int role);
 

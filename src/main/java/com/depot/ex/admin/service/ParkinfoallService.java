@@ -28,4 +28,6 @@ public interface ParkinfoallService {
 
 	void updateCardnum(String cardnum, String cardnumNew);
 
+	List<ParkinfoallData> findByCardNumByPage(int page, int size, String cardnum, String name);
+
 }

@@ -43,5 +43,8 @@ public class ParkinfoallServiceImpl implements ParkinfoallService {
 	public void updateCardnum(String cardnum, String cardnumNew) {
 		parkinfoallDao.updateCardnum(cardnum,cardnumNew);
 	}
+	public List<ParkinfoallData> findByCardNumByPage(int page, int size, String cardnum, String name) {
+		return parkinfoallDao.findByCardNumByPage(page,size,cardnum,name);
+	}
 
 }

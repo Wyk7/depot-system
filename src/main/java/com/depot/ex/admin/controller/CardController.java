@@ -144,10 +144,12 @@ public class CardController {
 	@RequestMapping("/index/card/alertDepotCard")
 	public Msg alertDepotCard(DepotcardManagerData depotcardManagerData)
 	{
-		
-		
-		
+			
 		Depotcard depotcard=depotcardService.findByCardnum(depotcardManagerData.getCardnum());
+		if(depotcardManagerData.getType()==null)
+		{
+			depotcardManagerData.setType(Integer.toString(depotcard.getType()));
+		}
 		if(depotcardManagerData.getIslose()!=depotcard.getIslose()
 				||Integer.parseInt(depotcardManagerData.getType())!=depotcard.getType())
 		{
@@ -240,7 +242,7 @@ public class CardController {
 		String trans=formatter.format(date);
 		String dateStr=trans.replaceAll(" ", "").replaceAll("-", "");
 		String cardnumNew=user.getUsername()+dateStr;
-		Depotcard depotcardNew=depotcardService.findByCardnum(cardnum);
+		Depotcard depotcardNew=depotcardService.findByCardnum(cardnumNew);
 		if(depotcardNew!=null)
 		{
 			return Msg.fail();
@@ -251,6 +253,9 @@ public class CardController {
 		incomeService.updateCardnum(cardnum,cardnumNew);
 		parkinfoService.updateCardnum(cardnum,cardnumNew);
 		parkinfoallService.updateCardnum(cardnum,cardnumNew);
+		depotcardNew=depotcardService.findByCardnum(cardnumNew);
+		depotcardNew.setIslose(0);
+		depotcardService.updateDepotcardBycardnum(depotcardNew);
 		return Msg.success();
 	}
 	@ResponseBody
@@ -258,6 +263,10 @@ public class CardController {
 	public Msg isAlertType(DepotcardManagerData depotcardManagerData)
 	{
 		Depotcard depotcard=depotcardService.findByCardnum(depotcardManagerData.getCardnum());
+		if(depotcardManagerData.getType()==null)
+		{
+			depotcardManagerData.setType(Integer.toString(depotcard.getType()));
+		}
 		if(depotcard.getType()!=Integer.parseInt(depotcardManagerData.getType()))
 		{
 			if(Integer.parseInt(depotcardManagerData.getType())>1)
@@ -288,7 +297,7 @@ public class CardController {
 				}
 			}
 		}
-		return Msg.fail().add("money_pay", 0);
+		return Msg.success().add("money_pay", 0);
 	}
 	
 }

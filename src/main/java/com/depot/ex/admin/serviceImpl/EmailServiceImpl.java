@@ -31,8 +31,8 @@ public class EmailServiceImpl implements EmailService{
 	public void updateManReadById(int id) {
 		emailDao.updateManReadById(id);
 	}
-	public List<EmailData> findByUserId(int page,int size,int id,int role,String content) {
-		return emailDao.findByUserId(page,size,id,role,content);
+	public List<EmailData> findByUserId(int page,int size,int id,int role,String content,Integer tag) {
+		return emailDao.findByUserId(page,size,id,role,content,tag);
 	}
 	public int findAllEmailCountByUser(int uid,int role) {
 		return emailDao.findAllEmailCountByUser(uid,role);

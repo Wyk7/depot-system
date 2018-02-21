@@ -114,7 +114,7 @@ public class UserController {
 					String cardnum=depotcard.getCardnum();
 					ParkInfo parkInfo=parkinfoService.findParkinfoByCardnum(cardnum);
 					//正在停车不能删
-					if(parkInfo==null)
+					if(parkInfo!=null)
 					{
 						return Msg.fail().add("va_msg", "有车辆在停车，不能删除！");
 					}else{

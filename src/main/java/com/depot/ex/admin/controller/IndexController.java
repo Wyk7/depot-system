@@ -166,6 +166,7 @@ public class IndexController {
 				count=userService.findAllUserCountMan(tag);
 			} else if (user1.getRole() == 3) {
 				users=new ArrayList<User>();
+				user1=userService.findUserById(user1.getId());
 				users.add(user1);
 				count=1;
 			} else if (user1.getRole() == 4) {
@@ -216,8 +217,9 @@ public class IndexController {
 				count=parkinfoallService.findAllParkinfoallCount(name);
 			} else if (user1.getRole() == 3) {
 				Depotcard depotcard=depotcardService.findByCardid(user1.getCardid());
-				parkinfoallDatas=parkinfoallService.findByCardNum(depotcard.getCardnum(),name);
-				count=parkinfoallDatas.size();
+				parkinfoallDatas=parkinfoallService.findByCardNumByPage(page*10,Constants.PAGESIZE,depotcard.getCardnum(),name);
+				List<ParkinfoallData> parkinfoallDatas1=parkinfoallService.findByCardNum(depotcard.getCardnum(),name);
+				count=parkinfoallDatas1.size();
 			} else if (user1.getRole() == 4) {
 
 			} else {
@@ -457,7 +459,7 @@ public class IndexController {
 		return "income";
 	}
 	@RequestMapping("/index/findAllEmail")
-	public String findAllEmail(Model model, HttpSession session,@RequestParam(value="page", required=false) Integer page,@RequestParam(value="content", required=false) String content)
+	public String findAllEmail(Model model, HttpSession session,@RequestParam(value="page", required=false) Integer page,@RequestParam(value="content", required=false) String content,@RequestParam(value="tag", required=false) Integer tag)
 	{
 		if(page==null)
 		{
@@ -471,12 +473,16 @@ public class IndexController {
 		{
 			content="";
 		}
+		if(tag==null)
+		{
+			tag=4;
+		}
 		List<EmailData> emails=null;
 		PageUtil<EmailData> pageUtil=new PageUtil<EmailData>();
 		int count =0;
 		int countPage=0;
 		User user1 = (User) session.getAttribute("user");
-		emails=emailService.findByUserId(page*10,Constants.PAGESIZE,user1.getId(),user1.getRole(),content);
+		emails=emailService.findByUserId(page*10,Constants.PAGESIZE,user1.getId(),user1.getRole(),content,tag);
 		List<EmailData> emailDatas=new ArrayList<EmailData>();
 		for(EmailData emailData:emails)
 		{
@@ -514,6 +520,7 @@ public class IndexController {
 		pageUtil.setCountPage(countPage);
 		pageUtil.setPages(emailDatas);
 		model.addAttribute("emails", pageUtil);
+		model.addAttribute("tag", tag);
 		return "email";
 	}
 	

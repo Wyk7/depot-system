@@ -28,4 +28,6 @@ public interface ParkinfoallDao extends BaseDao<Parkinfoall>{
 
 	void updateCardnum(@Param("cardnum")String cardnum, @Param("cardnumNew")String cardnumNew);
 
+	List<ParkinfoallData> findByCardNumByPage(@Param("page")int page, @Param("size")int size, @Param("cardnum")String cardnum, @Param("name")String name);
+
 }

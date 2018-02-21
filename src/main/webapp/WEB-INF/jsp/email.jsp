@@ -21,6 +21,27 @@
 					<c:if test="${sessionScope.user.role==3 }">
 					<button style="float: left;" class="btn btn-default" type="button" onclick="addEmail()">发送信息</button>
 					</c:if>
+					<div class="dropdown" style="float: right; margin-right: 10%">
+						<button type="button" class="btn dropdown-toggle"
+							id="dropdownMenu1" data-toggle="dropdown">
+							查看状态 <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu"
+							aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/findAllEmail?tag=4"
+								onclick="$('div#main').load(this.href);return false;">全部</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/findAllEmail?tag=2"
+								onclick="$('div#main').load(this.href);return false;">发送</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/findAllEmail?tag=0"
+								onclick="$('div#main').load(this.href);return false;">未读</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1"
+								href="${APP_PATH }/index/findAllEmail?tag=1"
+								onclick="$('div#main').load(this.href);return false;">已读</a></li>
+						</ul>
+					</div>
 				</caption>
 				<tr>
 					<th>序号</th>
@@ -45,19 +66,19 @@
 			</table>
 			<ul class="pagination">
 				
-				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current}"
+				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current}&&tag=${tag}"
 				target="main"
 					onclick="$('div#main').load(this.href);return false;">&laquo;</a></li>
-				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+1}"
+				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+1}&&tag=${tag}"
 				target="main"
 					onclick="$('div#main').load(this.href);return false;">${emails.current+1}</a></li>
 				<c:if test="${emails.current+1>=emails.countPage}">
-				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+1}"
+				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+1}&&tag=${tag}"
 				target="main"
 					onclick="$('div#main').load(this.href);return false;">&raquo;</a></li>
 				</c:if>
 				<c:if test="${emails.current+1<emails.countPage}">
-				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+2}"
+				<li><a href="${APP_PATH }/index/findAllEmail?page=${emails.current+2}&&tag=${tag}"
 				target="main"
 					onclick="$('div#main').load(this.href);return false;">&raquo;</a></li>
 				</c:if>
@@ -74,7 +95,7 @@
 				+ "</div>"
 				+ "<label>内容：</label><div style=\"width: 30%;\">"
 				+ "<div class=\"input-group\">"
-				+ "<textarea id=\"content\" name=\"content\" placeholder=\"请输入内容\" type=\"text\" class=\"form-control\" ></textarea>"
+				+ "<textarea id=\"textcontent\" name=\"content\" placeholder=\"请输入内容\" type=\"text\" class=\"form-control\" ></textarea>"
 				+ "</div></div>";
 		$("#myModalLabel").html("添加信息");
 		$("#checkSubmit").html("发送");
@@ -88,7 +109,7 @@
 	function addEmailSubmit()
 	{	
 		var title=$("#title").val();
-		var content=$("#content").val();
+		var content=$("#textcontent").val();
 		if(title=="")
 			{
 			alert("标题不能为空！")
@@ -131,19 +152,19 @@
 					{
 					var html = "<label>标题：</label><div style=\"width: 30%;\">"
 						+ "<div class=\"input-group\">"
-						+ "<input value=\""+data.extend.email.title+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
+						+ "<input id=\"sendtitle\" value=\""+data.extend.email.title+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
 						+ "</div>"
 						+ "</div>"
 						+"<label>内容：</label><div style=\"width: 30%;\">"
 						+ "<div class=\"input-group\">"
-						+ "<textarea id=\"content\" name=\"content\"  readonly  type=\"text\" class=\"form-control\" >"+data.extend.email.content+"</textarea>"
+						+ "<textarea id=\"textcontent\" name=\"content\"  readonly  type=\"text\" class=\"form-control\" >"+data.extend.email.content+"</textarea>"
 						+ "</div>"
 						+ "</div>";
 						$("#myModalLabel").html("信息");
 						if(data.extend.respon==1)
 							{
 							$("#checkSubmit").html("回复");
-							$("#checkSubmit").attr("onclick","addEmailRespon("+data.extend.email.id+","+data.extend.email.title+")");
+							$("#checkSubmit").attr("onclick","addEmailRespon("+data.extend.email.id+")");
 							}
 						else{
 							$("#checkSubmit").hide();
@@ -160,8 +181,9 @@
 	}
 	
 	
-	function addEmailRespon(id,title)
+	function addEmailRespon(id)
 	{
+		var title=$("#sendtitle").val();
 		var html ="<label>标题：</label><div style=\"width: 30%;\">"
 			+ "<div class=\"input-group\">"
 			+ "<input id=\"title\" name=\"title\" value=\""+"回复："+title+"\" type=\"text\" class=\"form-control\" readonly  unselectable=\"on\">"
@@ -170,7 +192,7 @@
 			+"<input id=\"id\" name=\"id\" value="+id+" hidden=\"hidden\"/>" 
 			+"<label>内容：</label><div style=\"width: 30%;\">"
 			+ "<div class=\"input-group\">"
-			+ "<textarea id=\"content\" name=\"content\" placeholder=\"请输入内容\" type=\"text\" class=\"form-control\" ></textarea>"
+			+ "<textarea id=\"textcontent\" name=\"content\" placeholder=\"请输入内容\" type=\"text\" class=\"form-control\" ></textarea>"
 			+ "</div>"
 			+ "</div>";
 			$("#myModalLabel").html("回复信息");
@@ -182,7 +204,7 @@
 	
 	function responEmailSubmit()
 	{
-		var content=$("#content").val();
+		var content=$("#textcontent").val();
 		if(content=="")
 			{
 			alert("内容不能为空!");
