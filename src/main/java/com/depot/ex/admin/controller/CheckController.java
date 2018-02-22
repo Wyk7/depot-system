@@ -34,6 +34,7 @@ import com.depot.ex.admin.service.ParkinfoService;
 import com.depot.ex.admin.service.ParkinfoallService;
 import com.depot.ex.admin.service.ParkspaceService;
 import com.depot.ex.admin.service.UserService;
+import com.depot.ex.utils.Constants;
 import com.depot.ex.utils.Msg;
 
 /**
@@ -284,7 +285,7 @@ public class CheckController {
 		IllegalInfo illegalInfo=illegalInfoService.findByCarnum(parkInfo.getCarnum(),parkInfo.getParkin());
 		if(illegalInfo!=null)
 		{
-			illegalmoney=50;
+			illegalmoney=Constants.ILLEGAL;
 		}
 		if(StringUtils.isEmpty(parkInfo.getCardnum()))
 		{
@@ -295,7 +296,7 @@ public class CheckController {
 			if(day%(1000*60*60)>0){
 			time+=1;
 			}
-			return Msg.success().add("money_pay", time*10+illegalmoney).add("va_msg", "临时停车"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
+			return Msg.success().add("money_pay", time*Constants.TEMPMONEY+illegalmoney).add("va_msg", "临时停车"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
 		}
 		String cardnum=parkInfo.getCardnum();
 		Depotcard depotcard=depotcardService.findByCardnum(cardnum);
@@ -316,11 +317,11 @@ public class CheckController {
 			if(day%(1000*60*60)>0){
 			time+=1;
 			}
-			if(balance+money-illegalmoney<time*8)
+			if(balance+money-illegalmoney<time*Constants.HOURMONEY)
 			{
-			return Msg.success().add("money_pay", time*8+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
+			return Msg.success().add("money_pay", time*Constants.HOURMONEY+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
 			}else{
-			return Msg.fail().add("type", 0).add("money_pay", time*8+illegalmoney-money);
+			return Msg.fail().add("type", 0).add("money_pay", time*Constants.HOURMONEY+illegalmoney-money);
 			}
 		}
 		Date deductedtime=depotcard.getDeductedtime();
@@ -354,9 +355,9 @@ public class CheckController {
 			if(day%(1000*60*60)>0){
 			time+=1;
 			}
-			if(balance+money-illegalmoney<time*8)
+			if(balance+money-illegalmoney<time*Constants.HOURMONEY)
 			{
-			return Msg.success().add("money_pay", time*8+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
+			return Msg.success().add("money_pay", time*Constants.HOURMONEY+illegalmoney-money-balance).add("va_msg", "余额不足"+(illegalmoney>0? ",有违规："+illegalInfo.getIllegalInfo():""));
 			}else{
 			return Msg.fail().add("type", 0);
 			}
