@@ -18,6 +18,7 @@ public class Email implements Serializable{
 	private String content;
 	private Date time;
 	private int userisread;
+	//0:Î´¶Á£¬1:ÒÑ¶Á£¬2:ÒÑ»Ø¸´
 	private int managerisread;
 	private int userdeleted;
 	private int managedelete;
